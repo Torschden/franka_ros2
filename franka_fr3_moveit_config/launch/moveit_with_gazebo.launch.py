@@ -1,18 +1,18 @@
 import os
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, GroupAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
-    # Arguments
+    # Arguments for MoveIt
     robot_ip_arg = DeclareLaunchArgument('robot_ip', default_value='0.0.0.0')
     use_fake_hardware_arg = DeclareLaunchArgument('use_fake_hardware', default_value='false')
     fake_sensor_commands_arg = DeclareLaunchArgument('fake_sensor_commands', default_value='false')
 
-    # Launch Gazebo with robot
+    # Launch Gazebo with robot and RViz (from your existing launch)
     gazebo_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
@@ -28,7 +28,7 @@ def generate_launch_description():
         }.items()
     )
 
-    # Launch MoveIt (reuse your moveit.launch.py, but skip robot_state_publisher and joint_state_publisher)
+    # Launch MoveIt (without RViz or hardware nodes)
     moveit_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
